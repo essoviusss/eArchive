@@ -44,6 +44,10 @@ dependencies:
   permission_handler: ^10.2.0
   http: ^0.13.6
   syncfusion_flutter_pdfviewer: ^21.2.3
+  image_picker: ^0.8.7+5
+  path_provider: ^2.0.15
+  anim_search_bar: ^2.0.3
+
 
 
 

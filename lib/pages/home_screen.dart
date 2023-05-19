@@ -1,12 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-
-import 'package:e_archive/Constants/size_constant.dart';
-import 'package:e_archive/pages/scan_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:e_archive/pages/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:e_archive/Auth/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:e_archive/Constants/size_constant.dart';
+import 'package:e_archive/pages/scan_screen.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+
+import 'image_upload.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final ImagePicker picker = ImagePicker();
   bool isLoading = false;
 
   Future<void> _showLogoutDialog() async {
@@ -95,20 +100,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.file_upload_outlined,
-                          size: 40,
-                        ),
-                      ),
+                      const ImageUpload(), // Use the ImageUpload widget here
                       SizedBox(
                         width: ScreenUtil.widthVar / 2,
                       ),
                       IconButton(
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const MainScreen()));
+                              builder: (context) => const ScanScreen()));
                         },
                         icon: const Icon(
                           Icons.camera_alt_outlined,

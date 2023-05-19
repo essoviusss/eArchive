@@ -6,14 +6,14 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 import 'package:permission_handler/permission_handler.dart';
 import 'package:e_archive/pages/result_screen.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class ScanScreen extends StatefulWidget {
+  const ScanScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<ScanScreen> createState() => _ScanScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
+class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
   bool _isPermissionGranted = false;
 
   late final Future<void> _future;
@@ -74,7 +74,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
               ),
             Scaffold(
               appBar: AppBar(
-                title: const Text('Scan Research Tit'),
+                title: const Text('Scan Research Title'),
               ),
               backgroundColor: _isPermissionGranted ? Colors.transparent : null,
               body: _isPermissionGranted
