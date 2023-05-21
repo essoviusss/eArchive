@@ -46,7 +46,9 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^21.2.3
   image_picker: ^0.8.7+5
   path_provider: ^2.0.15
-  anim_search_bar: ^2.0.3
+  network_info_plus: ^4.0.1
+  spincircle_bottom_bar: ^2.0.0
+  flutter_svg: ^2.0.5
 
 
 

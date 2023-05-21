@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 
 class ResultScreen extends StatefulWidget {
   final String text;
@@ -25,7 +26,7 @@ class _ResultScreenState extends State<ResultScreen> {
     try {
       final data = {'search_query': searchQuery};
       final response = await http.post(
-        Uri.parse('http://192.168.1.18/earchive_api/search_result.php'),
+        Uri.parse('http://192.168.1.102/earchive_api/search_result.php'),
         body: data,
       );
       setState(() {
@@ -46,7 +47,9 @@ class _ResultScreenState extends State<ResultScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Result'),
+        title: const Text('Result Screen'),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         children: [
@@ -54,7 +57,7 @@ class _ResultScreenState extends State<ResultScreen> {
             padding: const EdgeInsets.all(30.0),
             child: TextFormField(
               controller: _searchController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Search Result',
                 border: OutlineInputBorder(),
               ),
@@ -96,6 +99,28 @@ class _ResultScreenState extends State<ResultScreen> {
           SizedBox(
             height: ScreenUtil.heightVar / 80,
           ),
+          Container(
+            margin: EdgeInsets.only(
+                left: ScreenUtil.widthVar / 12,
+                right: ScreenUtil.widthVar / 12),
+            child: const Divider(
+              height: 0.1,
+              color: Colors.black,
+            ),
+          ),
+          SizedBox(
+            height: ScreenUtil.heightVar / 80,
+          ),
+          Container(
+            margin: EdgeInsets.only(
+                left: ScreenUtil.widthVar / 12,
+                right: ScreenUtil.widthVar / 12),
+            alignment: Alignment.centerLeft,
+            child: Text("Results:"),
+          ),
+          SizedBox(
+            height: ScreenUtil.heightVar / 80,
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: results.length,
@@ -115,7 +140,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: Colors.grey,
+                      color: Colors.grey.withOpacity(0.2),
                     ),
                     margin: EdgeInsets.only(
                         left: ScreenUtil.widthVar / 12,

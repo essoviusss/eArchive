@@ -1,19 +1,21 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
+import 'package:e_archive/pages/HomeContent.dart';
+import 'package:e_archive/pages/ProfileScreen.dart';
 import 'package:e_archive/pages/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:e_archive/Auth/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:e_archive/Constants/size_constant.dart';
 import 'package:e_archive/pages/scan_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-
-import 'image_upload.dart';
+import 'package:spincircle_bottom_bar/modals.dart';
+import 'package:spincircle_bottom_bar/spincircle_bottom_bar.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final String? text;
+  const HomeScreen({super.key, this.text});
   static const String id = "HomeScreen";
 
   @override
@@ -22,8 +24,39 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final ImagePicker picker = ImagePicker();
   bool isLoading = false;
+
+  int selectedIndex = 0;
+
+  void onItemTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+  }
+
+  final ImagePicker picker = ImagePicker();
+  final textRecognizer = TextRecognizer();
+
+  Future<void> _getImageFromGallery() async {
+    final navigator = Navigator.of(context);
+    final XFile? pickedFile =
+        await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      final inputImage = InputImage.fromFilePath(pickedFile.path);
+
+      final recognizedText = await textRecognizer.processImage(inputImage);
+
+      await navigator.push(
+        MaterialPageRoute(
+          builder: (BuildContext context) =>
+              HomeScreen(text: recognizedText.text),
+        ),
+      );
+    } else {
+      print('No image selected.');
+    }
+  }
 
   Future<void> _showLogoutDialog() async {
     return showDialog<void>(
@@ -70,57 +103,77 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: const Text('Home Screen'),
-        actions: [
-          IconButton(
-            onPressed: () => _showLogoutDialog(),
-            icon: const Icon(Icons.logout),
-          ),
-        ],
+    final List<Widget> screens = [
+      HomeContent(
+        text: widget.text,
       ),
-      body: Stack(
-        children: [
-          Container(
-            height: ScreenUtil.heightVar / 1,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/background.png'),
-                fit: BoxFit.cover,
-              ),
+      const ProfileScreen()
+    ];
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              onPressed: () => _showLogoutDialog(),
+              icon: const Icon(Icons.logout),
             ),
-            child: Container(
-              margin: EdgeInsets.only(top: ScreenUtil.heightVar / 4),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const ImageUpload(), // Use the ImageUpload widget here
-                      SizedBox(
-                        width: ScreenUtil.widthVar / 2,
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const ScanScreen()));
-                        },
-                        icon: const Icon(
-                          Icons.camera_alt_outlined,
-                          size: 40,
-                        ),
-                      )
-                    ],
+          ],
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          title: const Text("E-Archive"),
+          backgroundColor: Colors.deepOrangeAccent,
+        ),
+        //Adding SpinCircleBottomBarHolder to body of Scaffold
+        body: SpinCircleBottomBarHolder(
+          bottomNavigationBar: SCBottomBarDetails(
+              circleColors: [Colors.white, Colors.orange, Colors.redAccent],
+              iconTheme: const IconThemeData(color: Colors.black45),
+              activeIconTheme: const IconThemeData(color: Colors.orange),
+              backgroundColor: Colors.white,
+              titleStyle: const TextStyle(color: Colors.black45, fontSize: 12),
+              activeTitleStyle: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold),
+              actionButtonDetails: SCActionButtonDetails(
+                  color: Colors.redAccent,
+                  icon: const Icon(
+                    Icons.expand_less,
+                    color: Colors.white,
                   ),
-                ],
+                  elevation: 2),
+              elevation: 2.0,
+              items: [
+                SCBottomBarItem(
+                    icon: Icons.home,
+                    title: "Home",
+                    onPressed: () {
+                      onItemTapped(0);
+                    }),
+                SCBottomBarItem(
+                    icon: Icons.person,
+                    title: "Profile",
+                    onPressed: () {
+                      onItemTapped(1);
+                    }),
+              ],
+              circleItems: [
+                SCItem(
+                    icon: const Icon(Icons.camera),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const ScanScreen()));
+                    }),
+                SCItem(
+                    icon: const Icon(Icons.upload_file),
+                    onPressed: () {
+                      _getImageFromGallery();
+                    }),
+              ],
+              bnbHeight: 80 // Suggested Height 80
               ),
-            ),
-          )
-        ],
+          child: screens[selectedIndex],
+        ),
       ),
     );
   }

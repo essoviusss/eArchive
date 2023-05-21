@@ -17,6 +17,7 @@ class _LoginState extends State<Login> {
   bool viewPass = true;
   String idNo = '';
   String password = '';
+
   bool isLoading = false;
   final auth = FirebaseAuth.instance;
 
@@ -27,7 +28,7 @@ class _LoginState extends State<Login> {
       });
 
       final userCredential = await auth.signInWithEmailAndPassword(
-        email: idNo,
+        email: idNo == "20116742" ? "sample1@email.com" : "",
         password: password,
       );
 

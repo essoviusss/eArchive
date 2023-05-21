@@ -4,7 +4,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:e_archive/pages/result_screen.dart';
+
+import 'home_screen.dart';
 
 class ScanScreen extends StatefulWidget {
   const ScanScreen({super.key});
@@ -179,7 +180,7 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
       await navigator.push(
         MaterialPageRoute(
           builder: (BuildContext context) =>
-              ResultScreen(text: recognizedText.text),
+              HomeScreen(text: recognizedText.text),
         ),
       );
     } catch (e) {
