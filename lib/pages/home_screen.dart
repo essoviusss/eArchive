@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'package:e_archive/pages/HomeContent.dart';
 import 'package:e_archive/pages/ProfileScreen.dart';
-import 'package:e_archive/pages/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:e_archive/Auth/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -123,7 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
           title: const Text("E-Archive"),
           backgroundColor: Colors.deepOrangeAccent,
         ),
-        //Adding SpinCircleBottomBarHolder to body of Scaffold
         body: SpinCircleBottomBarHolder(
           bottomNavigationBar: SCBottomBarDetails(
               circleColors: [Colors.white, Colors.orange, Colors.redAccent],
@@ -145,11 +143,12 @@ class _HomeScreenState extends State<HomeScreen> {
               elevation: 2.0,
               items: [
                 SCBottomBarItem(
-                    icon: Icons.home,
-                    title: "Home",
-                    onPressed: () {
-                      onItemTapped(0);
-                    }),
+                  icon: Icons.home,
+                  title: "Home",
+                  onPressed: () {
+                    onItemTapped(0);
+                  },
+                ),
                 SCBottomBarItem(
                     icon: Icons.person,
                     title: "Profile",

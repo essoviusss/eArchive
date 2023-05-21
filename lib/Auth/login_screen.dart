@@ -28,7 +28,7 @@ class _LoginState extends State<Login> {
       });
 
       final userCredential = await auth.signInWithEmailAndPassword(
-        email: idNo == "20116742" ? "sample1@email.com" : "",
+        email: idNo == "20116742" ? "sample1@email.com" : idNo,
         password: password,
       );
 
@@ -82,11 +82,24 @@ class _LoginState extends State<Login> {
           SingleChildScrollView(
             child: Container(
               margin: EdgeInsets.only(
-                  top: ScreenUtil.heightVar / 1.45,
+                  top: ScreenUtil.heightVar / 3,
                   left: ScreenUtil.widthVar / 10,
                   right: ScreenUtil.widthVar / 10),
               child: Column(
                 children: [
+                  Image.asset(
+                    'assets/images/logo.png',
+                    scale: 1.1,
+                  ),
+                  Image.asset(
+                    'assets/images/name.png',
+                  ),
+                  Image.asset(
+                    'assets/images/desc.png',
+                  ),
+                  SizedBox(
+                    height: ScreenUtil.heightVar / 11,
+                  ),
                   TextField(
                     onChanged: (value) {
                       idNo = value;

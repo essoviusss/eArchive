@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:e_archive/Constants/size_constant.dart';
 import 'package:e_archive/pages/result_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -135,117 +137,139 @@ class _HomeContentState extends State<HomeContent> {
         ),
         backgroundColor: Colors.white,
         body: Container(
-          margin: EdgeInsets.only(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/background.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Container(
+            margin: EdgeInsets.only(
               left: ScreenUtil.widthVar / 20,
               right: ScreenUtil.widthVar / 20,
-              top: ScreenUtil.heightVar / 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                user == "sample@email.com"
-                    ? "Hi, Unknown User!"
-                    : user == "sample1@email.com"
-                        ? "Hi, Cole"
-                        : "",
-                style: const TextStyle(fontSize: 30),
-              ),
-              SizedBox(
-                height: ScreenUtil.heightVar / 100,
-              ),
-              const Divider(
-                thickness: 1,
-                color: Colors.grey,
-              ),
-              SizedBox(
-                height: ScreenUtil.heightVar / 100,
-              ),
-              // If the image is scanned, show search and result widgets.
-              if (_isImageScanned) ...[
-                Padding(
-                  padding: const EdgeInsets.all(30.0),
-                  child: TextFormField(
-                    controller: _searchController,
-                    decoration: const InputDecoration(
-                      labelText: 'Search Result',
-                      border: OutlineInputBorder(),
-                    ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(
+                    top: ScreenUtil.heightVar / 50,
+                    bottom: ScreenUtil.heightVar / 50,
+                  ),
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: Text(
+                    user == "sample@email.com"
+                        ? "Hi, Unknown User!"
+                        : user == "sample1@email.com"
+                            ? "Hi, Cole"
+                            : "",
+                    style: const TextStyle(
+                        fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        searchQuery(_searchController.text);
-                      },
-                      child: const Text('Search'),
+
+                const Divider(
+                  height: 0,
+                  thickness: 1,
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  height: ScreenUtil.heightVar / 100,
+                ),
+                // If the image is scanned, show search and result widgets.
+                if (_isImageScanned) ...[
+                  Padding(
+                    padding: const EdgeInsets.all(30.0),
+                    child: TextFormField(
+                      controller: _searchController,
+                      decoration: const InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        isDense: true,
+                        labelText: 'Search Result',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
-                  ],
-                ),
-                SizedBox(
-                  height: ScreenUtil.heightVar / 80,
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                      left: ScreenUtil.widthVar / 12,
-                      right: ScreenUtil.widthVar / 12),
-                  child: const Divider(
-                    height: 0.1,
-                    color: Colors.black,
                   ),
-                ),
-                SizedBox(
-                  height: ScreenUtil.heightVar / 80,
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                      left: ScreenUtil.widthVar / 12,
-                      right: ScreenUtil.widthVar / 12),
-                  alignment: Alignment.centerLeft,
-                  child: Text("Results:"),
-                ),
-                SizedBox(
-                  height: ScreenUtil.heightVar / 80,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: results.length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PdfViewScreen(
-                                pdfPath:
-                                    'assets/pdf/${results[index]['pdf_name']}.pdf',
-                              ),
-                            ),
-                          );
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          searchQuery(_searchController.text);
                         },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.grey.withOpacity(0.2),
-                          ),
-                          margin: EdgeInsets.only(
-                              left: ScreenUtil.widthVar / 12,
-                              right: ScreenUtil.widthVar / 12,
-                              bottom: ScreenUtil.heightVar / 90),
-                          child: ListTile(
-                            title: Text(
-                                "Title: ${results[index]['research_title']}"),
-                            subtitle: Text(
-                                'Publication Year: ${DateTime.parse(results[index]['publication_date']).year}\nAuthor Names: ${results[index]['author_names'].join(', ')}'),
-                          ),
-                        ),
-                      );
-                    },
+                        child: const Text('Search'),
+                      ),
+                    ],
                   ),
-                ),
+                  SizedBox(
+                    height: ScreenUtil.heightVar / 80,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: ScreenUtil.widthVar / 12,
+                        right: ScreenUtil.widthVar / 12),
+                    child: const Divider(
+                      height: 0.1,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(
+                    height: ScreenUtil.heightVar / 80,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: ScreenUtil.widthVar / 12,
+                        right: ScreenUtil.widthVar / 12),
+                    alignment: Alignment.centerLeft,
+                    child: const Text(
+                      "Results:",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
+                    height: ScreenUtil.heightVar / 80,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: results.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PdfViewScreen(
+                                  pdfPath:
+                                      'assets/pdf/${results[index]['pdf_name']}.pdf',
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: const Color(0xFFFFDEB9),
+                            ),
+                            margin: EdgeInsets.only(
+                                left: ScreenUtil.widthVar / 12,
+                                right: ScreenUtil.widthVar / 12,
+                                bottom: ScreenUtil.heightVar / 90),
+                            child: ListTile(
+                              title: Text(
+                                  "Title: ${results[index]['research_title']}"),
+                              subtitle: Text(
+                                  'Publication Year: ${DateTime.parse(results[index]['publication_date']).year}\nAuthor Names: ${results[index]['author_names'].join(', ')}'),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ));
   }
